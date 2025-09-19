@@ -1,4 +1,7 @@
 package com.jjungs.subscription.domain.notification
 
-class NotificationStatus {
+enum class NotificationStatus {
+    PENDING,
+    SENT,
+    FAILED
 }
