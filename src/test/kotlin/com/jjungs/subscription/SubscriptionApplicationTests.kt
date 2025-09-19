@@ -1,6 +1,8 @@
 package com.jjungs.subscription
 
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.extensions.spring.SpringTestExtension
+import io.kotest.extensions.spring.SpringTestLifecycleMode
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 
@@ -10,10 +12,13 @@ import org.springframework.test.context.TestPropertySource
     "spring.datasource.driver-class-name=org.h2.Driver",
     "spring.jpa.hibernate.ddl-auto=create-drop"
 ])
-class SubscriptionApplicationTests {
+class SubscriptionApplicationTests : AnnotationSpec() {
 
-	@Test
-	fun contextLoads() {
-	}
+    override fun extensions() = listOf(
+        SpringTestExtension(SpringTestLifecycleMode.Root)
+    )
 
+    @Test
+    fun contextLoads() {
+    }
 }

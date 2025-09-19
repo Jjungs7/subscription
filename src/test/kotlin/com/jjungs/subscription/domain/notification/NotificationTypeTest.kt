@@ -1,19 +1,17 @@
 package com.jjungs.subscription.domain.notification
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.shouldHaveSize
 
-class NotificationTypeTest {
-    @Test
-    fun `NotificationType 에 EMAIL, SMS, PUSH 이 있어야함`() {
-        assertEquals("EMAIL", NotificationType.EMAIL.name)
-        assertEquals("SMS", NotificationType.SMS.name)
-        assertEquals("PUSH", NotificationType.PUSH.name)
+class NotificationTypeTest : StringSpec({
+    "NotificationType should have EMAIL, SMS, PUSH values" {
+        NotificationType.EMAIL.name shouldBe "EMAIL"
+        NotificationType.SMS.name shouldBe "SMS"
+        NotificationType.PUSH.name shouldBe "PUSH"
     }
 
-    @Test
-    fun `NotificationType 은 enum 타입이어야함`() {
-        assertTrue(NotificationType.entries.toTypedArray().isNotEmpty())
-        assertEquals(3, NotificationType.entries.size)
+    "NotificationType should be enum with 3 entries" {
+        NotificationType.entries.shouldHaveSize(3)
     }
-}
+})

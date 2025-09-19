@@ -1,19 +1,17 @@
 package com.jjungs.subscription.domain.notification
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.shouldHaveSize
 
-class NotificationStatusTest {
-    @Test
-    fun `NotificationStatus 에 PENDING, SENT, FAILED 가 포함되어야함`() {
-        assertEquals("PENDING", NotificationStatus.PENDING.name)
-        assertEquals("SENT", NotificationStatus.SENT.name)
-        assertEquals("FAILED", NotificationStatus.FAILED.name)
+class NotificationStatusTest : StringSpec({
+    "NotificationStatus should have PENDING, SENT, FAILED values" {
+        NotificationStatus.PENDING.name shouldBe "PENDING"
+        NotificationStatus.SENT.name shouldBe "SENT"
+        NotificationStatus.FAILED.name shouldBe "FAILED"
     }
 
-    @Test
-    fun `NotificationStatus should be enum`() {
-        assertTrue(NotificationStatus.entries.toTypedArray().isNotEmpty())
-        assertEquals(3, NotificationStatus.entries.size)
+    "NotificationStatus should be enum with 3 entries" {
+        NotificationStatus.entries.shouldHaveSize(3)
     }
-}
+})
