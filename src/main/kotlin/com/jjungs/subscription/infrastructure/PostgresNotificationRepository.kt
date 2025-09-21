@@ -4,7 +4,6 @@ import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationRepository
 import com.jjungs.subscription.domain.notification.NotificationStatus
 import com.jjungs.subscription.domain.notification.NotificationType
-import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
@@ -12,7 +11,6 @@ import java.sql.ResultSet
 
 @Repository
 class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : NotificationRepository {
-
     private val rowMapper = RowMapper { rs: ResultSet, _: Int ->
         Notification(
             recipient = rs.getString("recipient"),
@@ -46,15 +44,11 @@ class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : N
     }
 
     override fun findById(id: String): Notification? {
-        return try {
-            jdbcTemplate.queryForObject(
-                "SELECT id, recipient, subject, message, type, timestamp, status FROM notifications WHERE id = ?",
-                rowMapper,
-                id,
-            )
-        } catch (_: IncorrectResultSizeDataAccessException) {
-            null
-        }
+        return jdbcTemplate.queryForObject(
+            "SELECT id, recipient, subject, message, type, timestamp, status FROM notifications WHERE id = ?",
+            rowMapper,
+            id,
+        )
     }
 
     override fun findAll(): List<Notification> {
@@ -65,6 +59,8 @@ class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : N
     }
 
     override fun deleteById(id: String) {
-        jdbcTemplate.update("DELETE FROM notifications WHERE id = ?", id)
+        val notification =
+            findById(id) ?: throw Exception("this should not return null. maybe rowmapper is not correct")
+        jdbcTemplate.update("DELETE FROM notifications WHERE id = ?", notification.id)
     }
 }
