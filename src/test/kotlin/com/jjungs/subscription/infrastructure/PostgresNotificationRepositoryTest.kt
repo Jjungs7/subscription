@@ -2,11 +2,13 @@ package com.jjungs.subscription.infrastructure
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationType
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import java.time.LocalDateTime
 
@@ -56,9 +58,8 @@ class PostgresNotificationRepositoryTest(
             foundNotification.type shouldBe NotificationType.SMS
         }
 
-        "should return null when finding non-existent notification" {
-            val foundNotification = repository.findById("non-existent-id")
-            foundNotification shouldBe null
+        "should throw EmptyResultDataAccessException when finding non-existent notification" {
+            shouldThrow<EmptyResultDataAccessException> { repository.findById("non-existent-id") }
         }
 
         "should find all notifications" {
@@ -99,14 +100,10 @@ class PostgresNotificationRepositoryTest(
 
             repository.save(notification)
 
-            // Verify it exists
-            repository.findById(notification.id).shouldNotBeNull()
-
-            // Delete it
+            repository.findById(notification.id)
             repository.deleteById(notification.id)
 
-            // Verify it's deleted
-            repository.findById(notification.id) shouldBe null
+            shouldThrow<EmptyResultDataAccessException> { repository.findById(notification.id) }
         }
     },
 )
