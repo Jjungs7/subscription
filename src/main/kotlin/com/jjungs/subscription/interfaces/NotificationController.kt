@@ -1,8 +1,8 @@
 package com.jjungs.subscription.interfaces
 
+import com.jjungs.subscription.application.notification.NotificationApplicationService
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationPort
-import com.jjungs.subscription.domain.notification.NotificationRepository
 import com.jjungs.subscription.domain.notification.NotificationType
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 @RequestMapping("/notifications")
 class NotificationController(
     private val notificationPort: NotificationPort,
-    private val notificationRepository: NotificationRepository,
+    private val notificationApplicationService: NotificationApplicationService,
 ) {
 
     @PostMapping
@@ -24,31 +24,31 @@ class NotificationController(
             timestamp = LocalDateTime.now(),
         )
 
-        // Save to repository
-        notificationRepository.save(notification)
+        // Save to repository through application service
+        notificationApplicationService.saveNotification(notification)
 
         // Send via notification port
         notificationPort.send(notification)
 
         // Save updated status
-        notificationRepository.save(notification)
+        notificationApplicationService.saveNotification(notification)
 
         return notification
     }
 
     @GetMapping("/{id}")
     fun getNotification(@PathVariable id: String): Notification? {
-        return notificationRepository.findById(id)
+        return notificationApplicationService.getNotification(id)
     }
 
     @GetMapping
     fun getAllNotifications(): List<Notification> {
-        return notificationRepository.findAll()
+        return notificationApplicationService.getAllNotifications()
     }
 
     @DeleteMapping("/{id}")
     fun deleteNotification(@PathVariable id: String) {
-        notificationRepository.deleteById(id)
+        notificationApplicationService.deleteNotification(id)
     }
 }
 
