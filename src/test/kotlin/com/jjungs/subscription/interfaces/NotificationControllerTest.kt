@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.whenever
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.dao.EmptyResultDataAccessException
@@ -44,14 +45,20 @@ class NotificationControllerTest(
             `when`("sending a notification") {
                 val request = SendNotificationRequest(recipient, subject, message, type)
                 val jsonRequest = objectMapper.writeValueAsString(request)
+                val notification = Notification(recipient, subject, message, type, LocalDateTime.now()).apply {
+                    javaClass.getDeclaredField("id").apply { isAccessible = true }.set(this, "test-id")
+                }
 
                 then("it should create and send the notification successfully") {
+                    doReturn(notification).whenever(notificationApplicationService).sendNotification(org.mockito.kotlin.any())
+
                     mockMvc.perform(
                         post("/notifications")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(jsonRequest),
                     )
                         .andExpect(status().isOk)
+                        .andExpect(jsonPath("$.id").value("test-id"))
                         .andExpect(jsonPath("$.recipient").value(recipient))
                         .andExpect(jsonPath("$.subject").value(subject))
                         .andExpect(jsonPath("$.message").value(message))
@@ -66,7 +73,8 @@ class NotificationControllerTest(
                 }
 
                 then("it should return the notification if it exists") {
-                    doReturn(notification).`when`(notificationApplicationService).getNotification(notificationId)
+                    doReturn(notification).`when`(notificationApplicationService)
+                        .getNotification(notificationId)
 
                     mockMvc.perform(get("/notifications/$notificationId"))
                         .andExpect(status().isOk)
