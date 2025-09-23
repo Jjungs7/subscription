@@ -30,17 +30,30 @@ class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : N
     }
 
     override fun save(notification: Notification) {
-        jdbcTemplate.update(
-            "INSERT INTO notifications (id, recipient, subject, message, type, timestamp, status)" +
-                    " VALUES(?, ?, ?, ?, ?, ?, ?)",
-            notification.id,
+        val rowsAffected = jdbcTemplate.update(
+            "UPDATE notifications SET recipient = ?, subject = ?, message = ?, type = ?, timestamp = ?, status = ? WHERE id = ?",
             notification.recipient,
             notification.subject,
             notification.message,
             notification.type.name,
             notification.timestamp,
             notification.status.name,
+            notification.id
         )
+
+        if (rowsAffected == 0) {
+            jdbcTemplate.update(
+                "INSERT INTO notifications (id, recipient, subject, message, type, timestamp, status)" +
+                        " VALUES(?, ?, ?, ?, ?, ?, ?)",
+                notification.id,
+                notification.recipient,
+                notification.subject,
+                notification.message,
+                notification.type.name,
+                notification.timestamp,
+                notification.status.name,
+            )
+        }
     }
 
     override fun findById(id: String): Notification? {

@@ -2,7 +2,6 @@ package com.jjungs.subscription.interfaces
 
 import com.jjungs.subscription.application.notification.NotificationApplicationService
 import com.jjungs.subscription.domain.notification.Notification
-import com.jjungs.subscription.domain.notification.NotificationPort
 import com.jjungs.subscription.domain.notification.NotificationType
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -10,7 +9,6 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/notifications")
 class NotificationController(
-    private val notificationPort: NotificationPort,
     private val notificationApplicationService: NotificationApplicationService,
 ) {
 
@@ -24,16 +22,7 @@ class NotificationController(
             timestamp = LocalDateTime.now(),
         )
 
-        // Save to repository through application service
-        notificationApplicationService.saveNotification(notification)
-
-        // Send via notification port
-        notificationPort.send(notification)
-
-        // Save updated status
-        notificationApplicationService.saveNotification(notification)
-
-        return notification
+        return notificationApplicationService.sendNotification(notification)
     }
 
     @GetMapping("/{id}")

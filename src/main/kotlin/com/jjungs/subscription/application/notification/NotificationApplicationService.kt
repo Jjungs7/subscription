@@ -11,14 +11,10 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class NotificationApplicationService(
+    private val notificationAdapterFactory: NotificationAdapterFactory,
     private val notificationRepository: NotificationRepository,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
-
-    fun saveNotification(notification: Notification): Notification {
-        notificationRepository.save(notification)
-        return notification
-    }
 
     fun getNotification(id: String): Notification? {
         return runCatching {
@@ -37,6 +33,21 @@ class NotificationApplicationService(
 
     fun getAllNotifications(): List<Notification> {
         return notificationRepository.findAll()
+    }
+
+    fun saveNotification(notification: Notification): Notification {
+        notificationRepository.save(notification)
+        return notification
+    }
+
+    fun sendNotification(notification: Notification): Notification {
+        saveNotification(notification)
+
+        val adapter = notificationAdapterFactory.getAdapter(notification.type)
+        adapter.send(notification)
+        saveNotification(notification)
+
+        return notification
     }
 
     fun deleteNotification(id: String) {

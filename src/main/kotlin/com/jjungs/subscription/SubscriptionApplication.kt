@@ -7,5 +7,11 @@ import org.springframework.boot.runApplication
 class SubscriptionApplication
 
 fun main(args: Array<String>) {
-	runApplication<SubscriptionApplication>(*args)
+    val context = runApplication<SubscriptionApplication>(*args)
+
+//    val beanNames = context.beanDefinitionNames.sorted()
+//    println("Beans provided by Spring Boot:")
+//    for (beanName in beanNames) {
+//        println(beanName)
+//    }
 }
