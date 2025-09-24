@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
 
 @Service
@@ -40,14 +42,27 @@ class NotificationApplicationService(
         return notification
     }
 
+    @Transactional
     fun sendNotification(notification: Notification): Notification {
+        // First transaction: Save notification
         saveNotification(notification)
-
-        val adapter = notificationAdapterFactory.getAdapter(notification.type)
-        adapter.send(notification)
-        saveNotification(notification)
+        sendAndSaveNotification(notification)
 
         return notification
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    private fun sendAndSaveNotification(notification: Notification) {
+        val adapter = notificationAdapterFactory.getAdapter(notification.type)
+
+        runCatching {
+            adapter.send(notification)
+            notification.markAsSent()
+            saveNotification(notification)
+        }.onFailure {
+            notification.markAsFailed()
+            saveNotification(notification)
+        }
     }
 
     fun deleteNotification(id: String) {

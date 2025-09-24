@@ -12,9 +12,7 @@ class DiscordNotificationAdapter : NotificationPort {
             Thread.sleep(150)
             println("Sending Discord notification to ${notification.recipient}: ${notification.subject}")
             println("Message: ${notification.message}")
-            notification.markAsSent()
         } catch (e: Exception) {
-            notification.markAsFailed()
             println("Failed to send Discord notification: ${e.message}")
             println(e.stackTrace)
         }
