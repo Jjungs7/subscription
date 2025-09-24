@@ -1,4 +1,7 @@
 package com.jjungs.subscription.domain.customer
 
-class CustomerStatus {
+enum class CustomerStatus {
+    ACTIVE,
+    INACTIVE,
+    SUSPENDED,
 }
