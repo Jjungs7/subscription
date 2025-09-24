@@ -7,13 +7,14 @@ import io.kotest.matchers.shouldBe
 class CustomerStatusTest : StringSpec(
     {
         "should have values ACTIVE, INACTIVE, SUSPENDED" {
+            CustomerStatus.PENDING.name shouldBe "PENDING"
             CustomerStatus.ACTIVE.name shouldBe "ACTIVE"
             CustomerStatus.INACTIVE.name shouldBe "INACTIVE"
             CustomerStatus.SUSPENDED.name shouldBe "SUSPENDED"
         }
 
-        "should have 3 values" {
-            CustomerStatus.entries.shouldHaveSize(3)
+        "should have 4 values" {
+            CustomerStatus.entries.shouldHaveSize(4)
         }
     },
 )
