@@ -1,7 +1,8 @@
-package com.jjungs.subscription.infrastructure
+package com.jjungs.subscription.infrastructure.notification
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationType
+import com.jjungs.subscription.infrastructure.PostgresNotificationRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize

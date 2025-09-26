@@ -3,7 +3,7 @@ package com.jjungs.subscription.config
 import com.jjungs.subscription.application.notification.NotificationApplicationService
 import com.jjungs.subscription.domain.notification.NotificationPort
 import com.jjungs.subscription.domain.notification.NotificationRepository
-import com.jjungs.subscription.infrastructure.FakeNotificationPort
+import com.jjungs.subscription.infrastructure.notification.FakeNotificationPort
 import org.mockito.Mockito.mock
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

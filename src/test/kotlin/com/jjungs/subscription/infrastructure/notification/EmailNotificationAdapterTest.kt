@@ -1,8 +1,9 @@
-package com.jjungs.subscription.infrastructure
+package com.jjungs.subscription.infrastructure.notification
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationStatus
 import com.jjungs.subscription.domain.notification.NotificationType
+import com.jjungs.subscription.infrastructure.EmailNotificationAdapter
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime

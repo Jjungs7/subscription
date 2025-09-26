@@ -1,4 +1,4 @@
-package com.jjungs.subscription.infrastructure
+package com.jjungs.subscription.infrastructure.notification
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationPort
