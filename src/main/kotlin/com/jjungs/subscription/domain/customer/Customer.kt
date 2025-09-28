@@ -1,18 +1,19 @@
 package com.jjungs.subscription.domain.customer
 
 import com.jjungs.subscription.domain.vo.Email
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 class Customer(
     val id: CustomerId,
     var email: Email,
+    var version: Long = 0,
 ) {
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: OffsetDateTime = OffsetDateTime.now()
 
     var status: CustomerStatus = CustomerStatus.PENDING
         private set
 
-    var updatedAt: LocalDateTime = createdAt
+    var updatedAt: OffsetDateTime = createdAt
         private set
 
     fun activate() {
@@ -36,7 +37,11 @@ class Customer(
     }
 
     private fun updateTimestamp() {
-        updatedAt = LocalDateTime.now()
+        updatedAt = OffsetDateTime.now()
+    }
+
+    fun incrementVersion() {
+        version++
     }
 
     override fun equals(other: Any?): Boolean {

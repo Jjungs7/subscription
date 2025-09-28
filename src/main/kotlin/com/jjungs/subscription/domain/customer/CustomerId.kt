@@ -1,8 +1,9 @@
 package com.jjungs.subscription.domain.customer
 
+import com.fasterxml.jackson.annotation.JsonValue
 import java.util.*
 
-class CustomerId(val value: String = UUID.randomUUID().toString()) {
+class CustomerId(@get:JsonValue val value: String = UUID.randomUUID().toString()) {
     constructor(uuid: UUID) : this(uuid.toString())
 
     init {

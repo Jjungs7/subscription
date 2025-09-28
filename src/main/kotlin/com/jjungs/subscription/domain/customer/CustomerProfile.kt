@@ -4,18 +4,18 @@ import com.jjungs.subscription.domain.vo.Name
 import com.jjungs.subscription.domain.vo.Phone
 import com.jjungs.subscription.domain.vo.setFirstName
 import com.jjungs.subscription.domain.vo.setLastName
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 class CustomerProfile(
     val customerId: CustomerId,
     var name: Name,
     var phoneNumber: Phone,
     var address: String = "",
-    var dateOfBirth: LocalDateTime? = null,
+    var dateOfBirth: OffsetDateTime? = null,
 ) {
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: OffsetDateTime = OffsetDateTime.now()
 
-    var updatedAt: LocalDateTime = createdAt
+    var updatedAt: OffsetDateTime = createdAt
         private set
 
     fun updateFirstName(newFirstName: String) {
@@ -40,13 +40,13 @@ class CustomerProfile(
         updateTimestamp()
     }
 
-    fun updateDateOfBirth(newDateOfBirth: LocalDateTime?) {
+    fun updateDateOfBirth(newDateOfBirth: OffsetDateTime?) {
         dateOfBirth = newDateOfBirth
         updateTimestamp()
     }
 
     private fun updateTimestamp() {
-        updatedAt = LocalDateTime.now()
+        updatedAt = OffsetDateTime.now()
     }
 
     override fun equals(other: Any?): Boolean {

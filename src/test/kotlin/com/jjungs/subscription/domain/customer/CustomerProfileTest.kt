@@ -6,7 +6,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 class CustomerProfileTest : StringSpec(
     {
@@ -31,7 +32,7 @@ class CustomerProfileTest : StringSpec(
             val lastName = "청"
             val phoneNumber = "01012345678"
             val address = "서울시 경기구 인천동"
-            val dateOfBirth = LocalDateTime.of(2025, 1, 1, 0, 0)
+            val dateOfBirth = OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
 
             val profile = CustomerProfile(
                 customerId,
@@ -146,7 +147,7 @@ class CustomerProfileTest : StringSpec(
                 Name("명", "청"),
                 Phone("01012345678"),
             )
-            val newDateOfBirth = LocalDateTime.of(1985, 5, 15, 0, 0)
+            val newDateOfBirth = OffsetDateTime.of(1985, 5, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
             val originalUpdatedAt = profile.updatedAt
 
             profile.updateDateOfBirth(newDateOfBirth)
