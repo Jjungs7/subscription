@@ -1,4 +1,4 @@
-package com.jjungs.subscription.interfaces
+package com.jjungs.subscription.interfaces.notification
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jjungs.subscription.application.notification.NotificationApplicationService
@@ -9,6 +9,7 @@ import com.jjungs.subscription.domain.notification.NotificationType
 import io.kotest.core.spec.style.BehaviorSpec
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.whenever
@@ -18,11 +19,10 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.*
 
 @WebMvcTest(NotificationController::class)
@@ -45,30 +45,31 @@ class NotificationControllerTest(
             `when`("sending a notification") {
                 val request = SendNotificationRequest(recipient, subject, message, type)
                 val jsonRequest = objectMapper.writeValueAsString(request)
-                val notification = Notification(recipient, subject, message, type, LocalDateTime.now()).apply {
+                val notification = Notification(recipient, subject, message, type, OffsetDateTime.now()).apply {
                     javaClass.getDeclaredField("id").apply { isAccessible = true }.set(this, "test-id")
                 }
 
                 then("it should create and send the notification successfully") {
-                    doReturn(notification).whenever(notificationApplicationService).sendNotification(org.mockito.kotlin.any())
+                    doReturn(notification).whenever(notificationApplicationService)
+                        .sendNotification(any())
 
                     mockMvc.perform(
-                        post("/notifications")
+                        MockMvcRequestBuilders.post("/notifications")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(jsonRequest),
                     )
-                        .andExpect(status().isOk)
-                        .andExpect(jsonPath("$.id").value("test-id"))
-                        .andExpect(jsonPath("$.recipient").value(recipient))
-                        .andExpect(jsonPath("$.subject").value(subject))
-                        .andExpect(jsonPath("$.message").value(message))
-                        .andExpect(jsonPath("$.type").value(type.name))
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("test-id"))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.recipient").value(recipient))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.subject").value(subject))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(message))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(type.name))
                 }
             }
 
             `when`("getting a notification by ID") {
                 val notificationId = UUID.randomUUID().toString()
-                val notification = Notification(recipient, subject, message, type, LocalDateTime.now()).apply {
+                val notification = Notification(recipient, subject, message, type, OffsetDateTime.now()).apply {
                     javaClass.getDeclaredField("id").apply { isAccessible = true }.set(this, notificationId)
                 }
 
@@ -76,13 +77,13 @@ class NotificationControllerTest(
                     doReturn(notification).`when`(notificationApplicationService)
                         .getNotification(notificationId)
 
-                    mockMvc.perform(get("/notifications/$notificationId"))
-                        .andExpect(status().isOk)
-                        .andExpect(jsonPath("$.id").value(notificationId))
-                        .andExpect(jsonPath("$.recipient").value(recipient))
-                        .andExpect(jsonPath("$.subject").value(subject))
-                        .andExpect(jsonPath("$.message").value(message))
-                        .andExpect(jsonPath("$.type").value(type.name))
+                    mockMvc.perform(MockMvcRequestBuilders.get("/notifications/$notificationId"))
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(notificationId))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.recipient").value(recipient))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.subject").value(subject))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(message))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.type").value(type.name))
                 }
 
                 then("it should return 400 if the notification does not exist") {
@@ -94,8 +95,8 @@ class NotificationControllerTest(
                         ),
                     ).`when`(notificationApplicationService).getNotification(nonExistingId)
 
-                    mockMvc.perform(get("/notifications/$nonExistingId"))
-                        .andExpect(status().isBadRequest)
+                    mockMvc.perform(MockMvcRequestBuilders.get("/notifications/$nonExistingId"))
+                        .andExpect(MockMvcResultMatchers.status().isBadRequest)
                 }
             }
 
@@ -105,7 +106,7 @@ class NotificationControllerTest(
                     "Subject 1",
                     "Message 1",
                     NotificationType.EMAIL,
-                    LocalDateTime.now(),
+                    OffsetDateTime.now(),
                 ).apply {
                     javaClass.getDeclaredField("id").apply { isAccessible = true }
                         .set(this, UUID.randomUUID().toString())
@@ -116,7 +117,7 @@ class NotificationControllerTest(
                     "Subject 2",
                     "Message 2",
                     NotificationType.SMS,
-                    LocalDateTime.now(),
+                    OffsetDateTime.now(),
                 ).apply {
                     javaClass.getDeclaredField("id").apply { isAccessible = true }
                         .set(this, UUID.randomUUID().toString())
@@ -126,19 +127,19 @@ class NotificationControllerTest(
                     doReturn(listOf(notification1, notification2)).`when`(notificationApplicationService)
                         .getAllNotifications()
 
-                    mockMvc.perform(get("/notifications"))
-                        .andExpect(status().isOk)
-                        .andExpect(jsonPath("$.length()").value(2))
-                        .andExpect(jsonPath("$[0].recipient").value("user1@example.com"))
-                        .andExpect(jsonPath("$[1].recipient").value("user2@example.com"))
+                    mockMvc.perform(MockMvcRequestBuilders.get("/notifications"))
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$[0].recipient").value("user1@example.com"))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$[1].recipient").value("user2@example.com"))
                 }
 
                 then("it should return an empty list when no notifications exist") {
                     doReturn(emptyList<Notification>()).`when`(notificationApplicationService).getAllNotifications()
 
-                    mockMvc.perform(get("/notifications"))
-                        .andExpect(status().isOk)
-                        .andExpect(jsonPath("$.length()").value(0))
+                    mockMvc.perform(MockMvcRequestBuilders.get("/notifications"))
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0))
                 }
             }
 
@@ -146,8 +147,8 @@ class NotificationControllerTest(
                 val notificationId = UUID.randomUUID().toString()
 
                 then("it should delete the notification successfully") {
-                    mockMvc.perform(delete("/notifications/$notificationId"))
-                        .andExpect(status().isOk)
+                    mockMvc.perform(MockMvcRequestBuilders.delete("/notifications/$notificationId"))
+                        .andExpect(MockMvcResultMatchers.status().isOk)
                 }
             }
         }

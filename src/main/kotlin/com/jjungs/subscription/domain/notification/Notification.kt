@@ -1,6 +1,6 @@
 package com.jjungs.subscription.domain.notification
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.*
 
 class Notification(
@@ -8,7 +8,7 @@ class Notification(
     val subject: String,
     val message: String,
     val type: NotificationType,
-    val timestamp: LocalDateTime,
+    val timestamp: OffsetDateTime,
 ) {
     val id = UUID.randomUUID().toString()
     var status = NotificationStatus.PENDING

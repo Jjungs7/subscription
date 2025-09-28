@@ -1,10 +1,10 @@
-package com.jjungs.subscription.interfaces
+package com.jjungs.subscription.interfaces.notification
 
 import com.jjungs.subscription.application.notification.NotificationApplicationService
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationType
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @RestController
 @RequestMapping("/notifications")
@@ -19,7 +19,7 @@ class NotificationController(
             subject = request.subject,
             message = request.message,
             type = request.type,
-            timestamp = LocalDateTime.now(),
+            timestamp = OffsetDateTime.now(),
         )
 
         return notificationApplicationService.sendNotification(notification)

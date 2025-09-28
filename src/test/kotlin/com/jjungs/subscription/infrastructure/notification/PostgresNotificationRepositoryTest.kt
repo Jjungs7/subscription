@@ -2,7 +2,6 @@ package com.jjungs.subscription.infrastructure.notification
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationType
-import com.jjungs.subscription.infrastructure.PostgresNotificationRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -11,7 +10,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @SpringBootTest
 class PostgresNotificationRepositoryTest(
@@ -25,7 +24,7 @@ class PostgresNotificationRepositoryTest(
                 subject = "Test Subject",
                 message = "Test Message",
                 type = NotificationType.EMAIL,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             repository.save(notification)
@@ -45,7 +44,7 @@ class PostgresNotificationRepositoryTest(
                 subject = "Find Test",
                 message = "Find Message",
                 type = NotificationType.SMS,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             repository.save(notification)
@@ -72,7 +71,7 @@ class PostgresNotificationRepositoryTest(
                 subject = "Test 1",
                 message = "Message 1",
                 type = NotificationType.EMAIL,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             val notification2 = Notification(
@@ -80,7 +79,7 @@ class PostgresNotificationRepositoryTest(
                 subject = "Test 2",
                 message = "Message 2",
                 type = NotificationType.SMS,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             repository.save(notification1)
@@ -96,7 +95,7 @@ class PostgresNotificationRepositoryTest(
                 subject = "Delete Test",
                 message = "Delete Message",
                 type = NotificationType.EMAIL,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             repository.save(notification)

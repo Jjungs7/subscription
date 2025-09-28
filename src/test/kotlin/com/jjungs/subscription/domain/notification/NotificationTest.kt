@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 class NotificationTest : StringSpec(
     {
@@ -13,7 +13,7 @@ class NotificationTest : StringSpec(
             val subject = "Test Subject"
             val message = "Test Message"
             val type = NotificationType.EMAIL
-            val timestamp = LocalDateTime.now()
+            val timestamp = OffsetDateTime.now()
 
             val notification = Notification(recipient, subject, message, type, timestamp)
 
@@ -31,7 +31,7 @@ class NotificationTest : StringSpec(
                 "Subject 1",
                 "Message 1",
                 NotificationType.EMAIL,
-                LocalDateTime.now(),
+                OffsetDateTime.now(),
             )
 
             val notification2 = Notification(
@@ -39,7 +39,7 @@ class NotificationTest : StringSpec(
                 "Subject 2",
                 "Message 2",
                 NotificationType.EMAIL,
-                LocalDateTime.now(),
+                OffsetDateTime.now(),
             )
 
             notification1.shouldNotBeNull()
@@ -52,7 +52,7 @@ class NotificationTest : StringSpec(
                 "Test Subject",
                 "Test Message",
                 NotificationType.EMAIL,
-                LocalDateTime.now(),
+                OffsetDateTime.now(),
             )
 
             NotificationStatus.PENDING shouldBe notification.status

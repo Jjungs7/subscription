@@ -1,4 +1,4 @@
-package com.jjungs.subscription.infrastructure
+package com.jjungs.subscription.infrastructure.notification
 
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationRepository
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
+import java.time.ZoneOffset
 
 @Repository
 class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : NotificationRepository {
@@ -17,7 +18,7 @@ class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : N
             subject = rs.getString("subject"),
             message = rs.getString("message"),
             type = NotificationType.valueOf(rs.getString("type")),
-            timestamp = rs.getTimestamp("timestamp").toLocalDateTime(),
+            timestamp = rs.getTimestamp("timestamp").toLocalDateTime().atOffset(ZoneOffset.of("Asia/Seoul")),
         ).apply {
             val idField = Notification::class.java.getDeclaredField("id")
             idField.isAccessible = true
@@ -38,7 +39,7 @@ class PostgresNotificationRepository(private val jdbcTemplate: JdbcTemplate) : N
             notification.type.name,
             notification.timestamp,
             notification.status.name,
-            notification.id
+            notification.id,
         )
 
         if (rowsAffected == 0) {

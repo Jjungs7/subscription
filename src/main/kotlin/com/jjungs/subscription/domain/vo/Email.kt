@@ -1,8 +1,9 @@
 package com.jjungs.subscription.domain.vo
 
+import com.fasterxml.jackson.annotation.JsonValue
 import java.util.regex.Pattern
 
-class Email(val value: String) {
+class Email(@get:JsonValue val value: String) {
     companion object {
         private val EMAIL_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9](\\.?[a-zA-Z0-9_-]+)+\\.[a-zA-Z]{2,}$",

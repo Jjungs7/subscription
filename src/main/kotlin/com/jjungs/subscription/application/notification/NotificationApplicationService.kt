@@ -44,7 +44,6 @@ class NotificationApplicationService(
 
     @Transactional
     fun sendNotification(notification: Notification): Notification {
-        // First transaction: Save notification
         saveNotification(notification)
         sendAndSaveNotification(notification)
 

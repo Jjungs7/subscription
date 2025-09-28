@@ -3,10 +3,9 @@ package com.jjungs.subscription.infrastructure.notification
 import com.jjungs.subscription.domain.notification.Notification
 import com.jjungs.subscription.domain.notification.NotificationStatus
 import com.jjungs.subscription.domain.notification.NotificationType
-import com.jjungs.subscription.infrastructure.EmailNotificationAdapter
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 class EmailNotificationAdapterTest : BehaviorSpec(
     {
@@ -17,7 +16,7 @@ class EmailNotificationAdapterTest : BehaviorSpec(
                 subject = "Test Subject",
                 message = "Test Message",
                 type = NotificationType.EMAIL,
-                timestamp = LocalDateTime.now(),
+                timestamp = OffsetDateTime.now(),
             )
 
             `when`("adapter sends the notification") {
