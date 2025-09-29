@@ -5,7 +5,12 @@ server:
     include-stacktrace: never
   tomcat:
     accesslog:
+      directory: /dev
       enabled: true
+      pattern: '%h %t "%r" %s %b %D'
+      prefix: stdout
+      suffix:
+      rotate: false
     basedir: .
 
 spring:
