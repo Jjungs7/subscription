@@ -1,6 +1,5 @@
 package com.jjungs.subscription.domain.customer
 
-import com.jjungs.subscription.domain.vo.Email
 import java.time.OffsetDateTime
 
 interface CustomerDomainEvent {

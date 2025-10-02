@@ -1,7 +1,6 @@
 package com.jjungs.subscription.application.customer
 
 import com.jjungs.subscription.domain.customer.*
-import com.jjungs.subscription.domain.vo.Email
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,9 +1,5 @@
 package com.jjungs.subscription.domain.customer
 
-import com.jjungs.subscription.domain.vo.Name
-import com.jjungs.subscription.domain.vo.Phone
-import com.jjungs.subscription.domain.vo.setFirstName
-import com.jjungs.subscription.domain.vo.setLastName
 import java.time.OffsetDateTime
 
 class CustomerProfile(

@@ -1,6 +1,5 @@
 package com.jjungs.subscription.domain.customer
 
-import com.jjungs.subscription.domain.vo.Email
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

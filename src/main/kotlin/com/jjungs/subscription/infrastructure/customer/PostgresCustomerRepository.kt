@@ -1,10 +1,6 @@
 package com.jjungs.subscription.infrastructure.customer
 
-import com.jjungs.subscription.domain.customer.Customer
-import com.jjungs.subscription.domain.customer.CustomerId
-import com.jjungs.subscription.domain.customer.CustomerRepository
-import com.jjungs.subscription.domain.customer.CustomerStatus
-import com.jjungs.subscription.domain.vo.Email
+import com.jjungs.subscription.domain.customer.*
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository

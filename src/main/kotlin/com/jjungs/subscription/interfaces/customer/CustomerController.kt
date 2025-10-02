@@ -4,7 +4,7 @@ import com.jjungs.subscription.application.customer.CustomerApplicationService
 import com.jjungs.subscription.application.customer.CustomerNotFoundException
 import com.jjungs.subscription.domain.customer.Customer
 import com.jjungs.subscription.domain.customer.CustomerId
-import com.jjungs.subscription.domain.vo.Email
+import com.jjungs.subscription.domain.customer.Email
 import com.jjungs.subscription.infrastructure.customer.CustomerConcurrentModificationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

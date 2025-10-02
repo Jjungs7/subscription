@@ -1,4 +1,4 @@
-package com.jjungs.subscription.domain.vo
+package com.jjungs.subscription.domain.customer
 
 import com.fasterxml.jackson.annotation.JsonValue
 import java.util.regex.Pattern

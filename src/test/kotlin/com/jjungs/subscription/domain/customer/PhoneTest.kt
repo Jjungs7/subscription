@@ -1,4 +1,4 @@
-package com.jjungs.subscription.domain.vo
+package com.jjungs.subscription.domain.customer
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec

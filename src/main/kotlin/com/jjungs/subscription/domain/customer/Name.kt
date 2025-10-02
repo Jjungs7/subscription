@@ -1,4 +1,4 @@
-package com.jjungs.subscription.domain.vo
+package com.jjungs.subscription.domain.customer
 
 class Name(firstName: String, lastName: String) {
     init {
