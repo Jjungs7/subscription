@@ -11,19 +11,19 @@ class PlanIdTest : StringSpec(
         "should create PlanId with valid UUID string" {
             val uuid = UUID.randomUUID()
             val planId = PlanId(uuid.toString())
-            planId.id shouldBe uuid.toString()
+            planId.value shouldBe uuid.toString()
         }
 
         "should create PlanId with UUID object" {
             val uuid = UUID.randomUUID()
             val planId = PlanId(uuid)
-            planId.id shouldBe uuid.toString()
+            planId.value shouldBe uuid.toString()
         }
 
         "should create PlanId with random UUID when no parameter provided" {
             val planId = PlanId()
-            planId.id shouldNotBe null
-            UUID.fromString(planId.id)
+            planId.value shouldNotBe null
+            UUID.fromString(planId.value)
         }
 
         "should throw exception for empty string" {
@@ -84,21 +84,21 @@ class PlanIdTest : StringSpec(
         "should handle minimum UUID" {
             val minUuid = "00000000-0000-0000-0000-000000000000"
             val planId = PlanId(minUuid)
-            planId.id shouldBe minUuid
+            planId.value shouldBe minUuid
         }
 
         "should handle maximum UUID" {
             val maxUuid = "ffffffff-ffff-ffff-ffff-ffffffffffff"
             val planId = PlanId(maxUuid)
-            planId.id shouldBe maxUuid
+            planId.value shouldBe maxUuid
         }
 
         "should be immutable" {
             val uuid = UUID.randomUUID()
             val planId = PlanId(uuid.toString())
-            val originalId = planId.id
+            val originalId = planId.value
 
-            planId.id shouldBe originalId
+            planId.value shouldBe originalId
         }
     },
 )

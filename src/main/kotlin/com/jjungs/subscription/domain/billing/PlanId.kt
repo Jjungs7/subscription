@@ -3,11 +3,11 @@ package com.jjungs.subscription.domain.billing
 import com.fasterxml.jackson.annotation.JsonValue
 import java.util.*
 
-class PlanId(@get:JsonValue val id: String = UUID.randomUUID().toString()) {
+class PlanId(@get:JsonValue val value: String = UUID.randomUUID().toString()) {
     constructor(uuid: UUID) : this(uuid.toString())
 
     init {
-        require(id.isNotBlank()) { "PlanId cannot be blank" }
+        require(value.isNotBlank()) { "PlanId cannot be blank" }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -16,10 +16,10 @@ class PlanId(@get:JsonValue val id: String = UUID.randomUUID().toString()) {
 
         other as PlanId
 
-        return id == other.id
+        return value == other.value
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return value.hashCode()
     }
 }
