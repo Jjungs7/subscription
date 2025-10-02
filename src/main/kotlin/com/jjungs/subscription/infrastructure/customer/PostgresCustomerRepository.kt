@@ -1,6 +1,7 @@
 package com.jjungs.subscription.infrastructure.customer
 
 import com.jjungs.subscription.domain.customer.*
+import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
@@ -11,41 +12,46 @@ import java.time.ZoneOffset
 class PostgresCustomerRepository(
     private val jdbcTemplate: JdbcTemplate,
 ) : CustomerRepository {
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val rowMapper = RowMapper { rs: ResultSet, _: Int ->
+        fun setPrivateField(obj: Any, fieldName: String, value: Any?) {
+            try {
+                val field = obj.javaClass.getDeclaredField(fieldName)
+                field.isAccessible = true
+                field.set(obj, value)
+            } catch (e: Exception) {
+                logger.error("Could not set field $fieldName", e)
+            }
+        }
+
         Customer(
             id = CustomerId(rs.getString("id")),
             email = Email(rs.getString("email")),
             version = rs.getLong("version"),
         ).apply {
-            // Set status and timestamps using reflection
-            val statusField = Customer::class.java.getDeclaredField("status")
-            statusField.isAccessible = true
-            statusField.set(this, CustomerStatus.valueOf(rs.getString("status")))
-
-            val createdAtField = Customer::class.java.getDeclaredField("createdAt")
-            createdAtField.isAccessible = true
-            createdAtField.set(
-                this, rs.getTimestamp("created_at").toLocalDateTime().atOffset(ZoneOffset.of("+09:00")),
+            setPrivateField(this, "status", rs.getString("status"))
+            setPrivateField(
+                this,
+                "createdAt",
+                rs.getTimestamp("created_at").toLocalDateTime().atOffset(ZoneOffset.of("+09:00")),
             )
-
-            val updatedAtField = Customer::class.java.getDeclaredField("updatedAt")
-            updatedAtField.isAccessible = true
-            updatedAtField.set(
-                this, rs.getTimestamp("updated_at").toLocalDateTime().atOffset(ZoneOffset.of("+09:00")),
+            setPrivateField(
+                this,
+                "updatedAt",
+                rs.getTimestamp("updated_at").toLocalDateTime().atOffset(ZoneOffset.of("+09:00")),
             )
         }
     }
 
     override fun save(customer: Customer) {
         if (customer.version == 0L) {
-            // Insert new customer
             jdbcTemplate.update(
                 """
                 INSERT INTO customers (id, email, status, created_at, updated_at, version)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                customer.id.value,
+                customer.id.id,
                 customer.email.value,
                 customer.status.name,
                 customer.createdAt,
@@ -54,7 +60,6 @@ class PostgresCustomerRepository(
             )
             customer.incrementVersion()
         } else {
-            // Update existing customer with optimistic locking
             val rowsAffected = jdbcTemplate.update(
                 """
                 UPDATE customers 
@@ -64,7 +69,7 @@ class PostgresCustomerRepository(
                 customer.email.value,
                 customer.status.name,
                 customer.updatedAt,
-                customer.id.value,
+                customer.id.id,
                 customer.version,
             )
 
@@ -80,7 +85,7 @@ class PostgresCustomerRepository(
         return jdbcTemplate.queryForObject(
             "SELECT id, email, status, created_at, updated_at, version FROM customers WHERE id = ?",
             rowMapper,
-            id.value,
+            id.id,
         )
     }
 
@@ -108,9 +113,17 @@ class PostgresCustomerRepository(
     }
 
     override fun deleteById(id: CustomerId) {
-        jdbcTemplate.update("DELETE FROM customers WHERE id = ?", id.value)
+        val rowsAffected = jdbcTemplate.update("DELETE FROM customers WHERE id = ?", id.id)
+        if (rowsAffected == 0) {
+            throw CustomerNotFoundException(id)
+        }
     }
 }
+
+class CustomerNotFoundException(
+    val customerId: CustomerId,
+    message: String = "Customer not found with id: ${customerId.id}",
+) : RuntimeException(message)
 
 class CustomerConcurrentModificationException(
     val customerId: CustomerId,
