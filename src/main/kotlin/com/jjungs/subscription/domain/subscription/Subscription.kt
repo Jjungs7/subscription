@@ -209,12 +209,12 @@ class Subscription(
         return checkDate.isAfter(nextBillingDate) || checkDate.isEqual(nextBillingDate)
     }
 
-    private fun updateTimestamp() {
-        updatedAt = OffsetDateTime.now()
+    fun incrementVersion() {
+        version++
     }
 
-    private fun incrementVersion() {
-        version++
+    private fun updateTimestamp() {
+        updatedAt = OffsetDateTime.now()
     }
 
     override fun equals(other: Any?): Boolean {
