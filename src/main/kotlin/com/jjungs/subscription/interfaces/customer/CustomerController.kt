@@ -143,7 +143,7 @@ data class CustomerResponse(
     companion object {
         fun from(customer: Customer): CustomerResponse {
             return CustomerResponse(
-                id = customer.id.value,
+                id = customer.id.id,
                 email = customer.email.value,
                 status = customer.status.name,
                 version = customer.version,

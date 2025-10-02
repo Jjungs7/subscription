@@ -3,24 +3,24 @@ package com.jjungs.subscription.domain.customer
 import com.fasterxml.jackson.annotation.JsonValue
 import java.util.*
 
-class CustomerId(@get:JsonValue val value: String = UUID.randomUUID().toString()) {
+class CustomerId(@get:JsonValue val id: String = UUID.randomUUID().toString()) {
     constructor(uuid: UUID) : this(uuid.toString())
 
     init {
-        require(value.isNotBlank()) { "CustomerId cannot be blank" }
+        require(id.isNotBlank()) { "CustomerId cannot be blank" }
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CustomerId) return false
-        return value == other.value
+        return id == other.id
     }
 
     override fun hashCode(): Int {
-        return value.hashCode()
+        return id.hashCode()
     }
 
     override fun toString(): String {
-        return value
+        return id
     }
 }

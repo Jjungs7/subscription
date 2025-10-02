@@ -131,7 +131,7 @@ class KafkaCustomerEventListeners {
     }
 
     private fun createCustomerProfile(customerId: CustomerId, email: String) {
-        logger.info("Creating customer profile for customerId=${customerId.value}, email=$email")
+        logger.info("Creating customer profile for customerId=${customerId.id}, email=$email")
         // Implementation would call profile service
     }
 
@@ -141,7 +141,7 @@ class KafkaCustomerEventListeners {
     }
 
     private fun enableCustomerFeatures(customerId: CustomerId) {
-        logger.info("Enabling customer features for customerId=${customerId.value}")
+        logger.info("Enabling customer features for customerId=${customerId.id}")
         // Implementation would call feature service
     }
 
@@ -151,7 +151,7 @@ class KafkaCustomerEventListeners {
     }
 
     private fun disableCustomerFeatures(customerId: CustomerId) {
-        logger.info("Disabling customer features for customerId=${customerId.value}")
+        logger.info("Disabling customer features for customerId=${customerId.id}")
         // Implementation would call feature service
     }
 
@@ -161,7 +161,7 @@ class KafkaCustomerEventListeners {
     }
 
     private fun archiveCustomerData(customerId: CustomerId) {
-        logger.info("Archiving customer data for customerId=${customerId.value}")
+        logger.info("Archiving customer data for customerId=${customerId.id}")
         // Implementation would call archive service
     }
 
@@ -176,7 +176,7 @@ class KafkaCustomerEventListeners {
     }
 
     private fun updateExternalSystems(customerId: CustomerId, newEmail: String) {
-        logger.info("Updating external systems for customerId=${customerId.value} with new email: $newEmail")
+        logger.info("Updating external systems for customerId=${customerId.id} with new email: $newEmail")
         // Implementation would call external system services
     }
 }

@@ -14,7 +14,7 @@ class CustomerIdTest : StringSpec(
 
             val customerId = CustomerId(idString)
 
-            customerId.value shouldBe idString
+            customerId.id shouldBe idString
         }
 
         "should create valid CustomerId from UUID" {
@@ -22,16 +22,16 @@ class CustomerIdTest : StringSpec(
 
             val customerId = CustomerId(uuid)
 
-            customerId.value shouldBe uuid.toString()
+            customerId.id shouldBe uuid.toString()
         }
 
         "should generate unique CustomerId when no value provided" {
             val customerId1 = CustomerId()
             val customerId2 = CustomerId()
 
-            customerId1.value shouldNotBe customerId2.value
-            customerId1.value.isNotBlank() shouldBe true
-            customerId2.value.isNotBlank() shouldBe true
+            customerId1.id shouldNotBe customerId2.id
+            customerId1.id.isNotBlank() shouldBe true
+            customerId2.id.isNotBlank() shouldBe true
         }
 
         "should throw exception for empty string" {
@@ -75,7 +75,7 @@ class CustomerIdTest : StringSpec(
 
             val customerId = CustomerId(validUuid)
 
-            customerId.value shouldBe validUuid
+            customerId.id shouldBe validUuid
         }
 
         "should accept custom string format for CustomerId" {
@@ -83,7 +83,7 @@ class CustomerIdTest : StringSpec(
 
             val customerId = CustomerId(customId)
 
-            customerId.value shouldBe customId
+            customerId.id shouldBe customId
         }
     },
 )
