@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component
  * to Kafka topics for external system consumption.
  */
 @Component
-class CustomerKafkaEventPublisher(
+class KafkaCustomerEventPublisher(
     private val kafkaTemplate: KafkaTemplate<String, Any>,
 ) : CustomerEventPublisher {
 
-    private val logger = LoggerFactory.getLogger(CustomerKafkaEventPublisher::class.java)
+    private val logger = LoggerFactory.getLogger(KafkaCustomerEventPublisher::class.java)
     private val topicName = "customer-events"
 
     override fun publish(event: CustomerCreated) {

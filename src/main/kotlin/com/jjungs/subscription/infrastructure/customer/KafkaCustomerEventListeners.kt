@@ -6,8 +6,8 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 
 @Component
-class CustomerKafkaEventListeners {
-    private val logger = LoggerFactory.getLogger(CustomerKafkaEventListeners::class.java)
+class KafkaCustomerEventListeners {
+    private val logger = LoggerFactory.getLogger(KafkaCustomerEventListeners::class.java)
 
     @KafkaListener(topics = ["customer-events"], groupId = "subscription-service")
     fun handle(event: CustomerDomainEvent) {
