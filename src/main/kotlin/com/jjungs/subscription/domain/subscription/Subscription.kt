@@ -49,6 +49,7 @@ class Subscription(
         require(status == SubscriptionStatus.PENDING) {
             "Trial can only be started from PENDING status. Current status: $status"
         }
+        require(this.trialEndDate == null) { "Trial already expired for this subscription." }
         require(trialEndDate.isAfter(OffsetDateTime.now())) {
             "Trial end date must be in the future. Provided: $trialEndDate"
         }
