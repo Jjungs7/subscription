@@ -2,6 +2,7 @@ package com.jjungs.subscription.infrastructure.customer
 
 import com.jjungs.subscription.domain.customer.*
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class KafkaCustomerEventPublisher(
-    private val kafkaTemplate: KafkaTemplate<String, Any>,
+    @param:Qualifier("customerKafkaTemplate") private val kafkaTemplate: KafkaTemplate<String, Any>,
 ) : CustomerEventPublisher {
 
     private val logger = LoggerFactory.getLogger(KafkaCustomerEventPublisher::class.java)

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class KafkaCustomerEventListeners {
     private val logger = LoggerFactory.getLogger(KafkaCustomerEventListeners::class.java)
 
-    @KafkaListener(topics = ["customer-events"], groupId = "subscription-service")
+    @KafkaListener(topics = ["customer-events"], containerFactory = "customerKafkaListenerContainerFactory")
     fun handle(event: CustomerDomainEvent) {
         when (event) {
             is CustomerCreated -> handle(event)

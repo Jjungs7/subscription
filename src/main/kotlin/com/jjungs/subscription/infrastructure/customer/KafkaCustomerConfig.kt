@@ -7,27 +7,24 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.*
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
-@EnableKafka
 class KafkaCustomerConfig {
 
     @Value("\${kafka.bootstrap-servers}")
     private lateinit var bootstrapServers: String
 
-    @Value("\${kafka.consumer.group-id:subscription-service}")
-    private lateinit var groupId: String
-
     @Value("\${spring.kafka.consumer.properties.spring.json.trusted.packages}")
     private lateinit var consumerTrustedPackages: String
 
+    private val groupId: String = "customer-service"
+
     @Bean
-    fun producerFactory(): ProducerFactory<String, Any> {
+    fun customerProducerFactory(): ProducerFactory<String, Any> {
         val props = mapOf(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
@@ -40,12 +37,12 @@ class KafkaCustomerConfig {
     }
 
     @Bean
-    fun kafkaTemplate(): KafkaTemplate<String, Any> {
-        return KafkaTemplate(producerFactory())
+    fun customerKafkaTemplate(): KafkaTemplate<String, Any> {
+        return KafkaTemplate(customerProducerFactory())
     }
 
     @Bean
-    fun consumerFactory(): ConsumerFactory<String, Any> {
+    fun customerConsumerFactory(): ConsumerFactory<String, Any> {
         val props = mapOf(
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ConsumerConfig.GROUP_ID_CONFIG to groupId,
@@ -60,9 +57,9 @@ class KafkaCustomerConfig {
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, Any> {
+    fun customerKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, Any> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, Any>()
-        factory.consumerFactory = consumerFactory()
+        factory.consumerFactory = customerConsumerFactory()
         return factory
     }
 }
