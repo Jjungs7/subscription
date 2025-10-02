@@ -1,6 +1,6 @@
 package com.jjungs.subscription.domain.billing
 
-import java.time.LocalDate
+import java.time.OffsetDateTime
 
 enum class BillingCycleType {
     DAILY,
@@ -24,7 +24,7 @@ class BillingCycle(
         fun yearly(): BillingCycle = BillingCycle(BillingCycleType.YEARLY)
     }
 
-    fun calculateNextBillingDate(currentDate: LocalDate): LocalDate {
+    fun calculateNextBillingDate(currentDate: OffsetDateTime): OffsetDateTime {
         return when (type) {
             BillingCycleType.DAILY -> currentDate.plusDays(interval.toLong())
             BillingCycleType.WEEKLY -> currentDate.plusWeeks(interval.toLong())

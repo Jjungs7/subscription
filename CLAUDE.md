@@ -136,7 +136,7 @@ How external systems interact with the application:
 
 always follow these four steps
 
-1. write tests codes. do not write any implementations
+1. write tests codes. do not write any implementations. use kotest with StringSpec instead of junit
 2. git commit tests codes. do not git push
 3. write implementations
 4. git commit implementations. do not git push

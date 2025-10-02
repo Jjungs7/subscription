@@ -4,7 +4,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 class BillingCycleTest : StringSpec(
     {
@@ -83,44 +84,16 @@ class BillingCycleTest : StringSpec(
 
         "should calculate next monthly billing date" {
             val cycle = BillingCycle(BillingCycleType.MONTHLY)
-            val currentDate = LocalDate.of(2024, 1, 15)
+            val currentDate = OffsetDateTime.of(2024, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
             val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2024, 2, 15)
+            nextDate shouldBe OffsetDateTime.of(2024, 2, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
         }
 
         "should calculate next yearly billing date" {
             val cycle = BillingCycle(BillingCycleType.YEARLY)
-            val currentDate = LocalDate.of(2024, 1, 15)
+            val currentDate = OffsetDateTime.of(2024, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
             val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2025, 1, 15)
-        }
-
-        "should calculate next weekly billing date" {
-            val cycle = BillingCycle(BillingCycleType.WEEKLY)
-            val currentDate = LocalDate.of(2024, 1, 15)
-            val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2024, 1, 22)
-        }
-
-        "should calculate next daily billing date" {
-            val cycle = BillingCycle(BillingCycleType.DAILY)
-            val currentDate = LocalDate.of(2024, 1, 15)
-            val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2024, 1, 16)
-        }
-
-        "should handle custom interval billing dates" {
-            val cycle = BillingCycle(BillingCycleType.MONTHLY, 3)
-            val currentDate = LocalDate.of(2024, 1, 15)
-            val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2024, 4, 15)
-        }
-
-        "should handle leap year correctly" {
-            val cycle = BillingCycle(BillingCycleType.YEARLY)
-            val currentDate = LocalDate.of(2024, 2, 29) // Leap year
-            val nextDate = cycle.calculateNextBillingDate(currentDate)
-            nextDate shouldBe LocalDate.of(2025, 2, 28) // Non-leap year
+            nextDate shouldBe OffsetDateTime.of(2025, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
         }
 
         "should create monthly cycle" {
@@ -147,10 +120,38 @@ class BillingCycleTest : StringSpec(
             cycle.interval shouldBe 1
         }
 
+        "should calculate next weekly billing date" {
+            val cycle = BillingCycle(BillingCycleType.WEEKLY)
+            val currentDate = OffsetDateTime.of(2024, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+            val nextDate = cycle.calculateNextBillingDate(currentDate)
+            nextDate shouldBe OffsetDateTime.of(2024, 1, 22, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+        }
+
+        "should calculate next daily billing date" {
+            val cycle = BillingCycle(BillingCycleType.DAILY)
+            val currentDate = OffsetDateTime.of(2024, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+            val nextDate = cycle.calculateNextBillingDate(currentDate)
+            nextDate shouldBe OffsetDateTime.of(2024, 1, 16, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+        }
+
+        "should handle custom interval billing dates" {
+            val cycle = BillingCycle(BillingCycleType.MONTHLY, 3)
+            val currentDate = OffsetDateTime.of(2024, 1, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+            val nextDate = cycle.calculateNextBillingDate(currentDate)
+            nextDate shouldBe OffsetDateTime.of(2024, 4, 15, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+        }
+
+        "should handle leap year correctly" {
+            val cycle = BillingCycle(BillingCycleType.YEARLY)
+            val currentDate = OffsetDateTime.of(2024, 2, 29, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+            val nextDate = cycle.calculateNextBillingDate(currentDate)
+            nextDate shouldBe OffsetDateTime.of(2025, 2, 28, 0, 0, 0, 0, ZoneOffset.of("+09:00"))
+        }
+
         "should compare BillingCycle objects correctly" {
             val monthly = BillingCycle(BillingCycleType.MONTHLY)
-            val yearly = BillingCycle(BillingCycleType.YEARLY)
             val monthly2 = BillingCycle(BillingCycleType.MONTHLY)
+            val yearly = BillingCycle(BillingCycleType.YEARLY)
 
             monthly.compareTo(yearly) shouldBe -1
             yearly.compareTo(monthly) shouldBe 1

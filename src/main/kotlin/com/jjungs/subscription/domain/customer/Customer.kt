@@ -9,11 +9,10 @@ class Customer(
     var version: Long = 0,
 ) {
     val createdAt: OffsetDateTime = OffsetDateTime.now()
-
-    var status: CustomerStatus = CustomerStatus.PENDING
+    var updatedAt: OffsetDateTime = createdAt
         private set
 
-    var updatedAt: OffsetDateTime = createdAt
+    var status: CustomerStatus = CustomerStatus.PENDING
         private set
 
     fun activate() {
