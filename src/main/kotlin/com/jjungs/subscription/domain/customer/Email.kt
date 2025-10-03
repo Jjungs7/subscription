@@ -3,7 +3,7 @@ package com.jjungs.subscription.domain.customer
 import com.fasterxml.jackson.annotation.JsonValue
 import java.util.regex.Pattern
 
-class Email(@get:JsonValue val value: String) {
+data class Email(@get:JsonValue val value: String) {
     companion object {
         private val EMAIL_PATTERN = Pattern.compile(
             "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9](\\.?[a-zA-Z0-9_-]+)+\\.[a-zA-Z]{2,}$",
@@ -17,19 +17,5 @@ class Email(@get:JsonValue val value: String) {
 
     private fun isValidEmail(email: String): Boolean {
         return EMAIL_PATTERN.matcher(email).matches()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Email) return false
-        return value == other.value
-    }
-
-    override fun hashCode(): Int {
-        return value.hashCode()
-    }
-
-    override fun toString(): String {
-        return value
     }
 }

@@ -17,26 +17,4 @@ data class PaymentMethodResult(
             return PaymentMethodResult(false, paymentMethodId, message)
         }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as PaymentMethodResult
-
-        if (success != other.success) return false
-        if (paymentMethodId != other.paymentMethodId) return false
-        if (errorMessage != other.errorMessage) return false
-        if (occurredAt != other.occurredAt) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = success.hashCode()
-        result = 31 * result + paymentMethodId.hashCode()
-        result = 31 * result + errorMessage.hashCode()
-        result = 31 * result + occurredAt.hashCode()
-        return result
-    }
 }

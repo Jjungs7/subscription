@@ -2,7 +2,7 @@ package com.jjungs.subscription.domain.billing
 
 import com.fasterxml.jackson.annotation.JsonValue
 
-class Money(@get:JsonValue val amount: Long) : Comparable<Money> {
+data class Money(@get:JsonValue val amount: Long) : Comparable<Money> {
     init {
         require(amount >= 0) { "Money amount cannot be negative: $amount" }
         Integer.valueOf(0)
@@ -23,19 +23,6 @@ class Money(@get:JsonValue val amount: Long) : Comparable<Money> {
 
     fun toCents(): Long {
         return amount
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Money
-
-        return amount == other.amount
-    }
-
-    override fun hashCode(): Int {
-        return amount.hashCode()
     }
 
     override fun compareTo(other: Money): Int {
